@@ -1,7 +1,8 @@
 TODO:
-*   deal with imgur albums
-+   recognize if the img is bw or colorful already..
-*   deal with gifs
+*   use somatic processing
+*   dockerfile
+*   remove unnecessary dependecies 
+
 *   if user has cakeday, congratulate him!
 + maximum picture size limit
 *   fix the db to work with multi-processes scenarios
