@@ -2,7 +2,7 @@ TODO:
 *   use somatic processing
 *   dockerfile
 *   remove unnecessary dependecies 
-
+*   add endpoint for random style or "best style"
 *   if user has cakeday, congratulate him!
 + maximum picture size limit
 *   fix the db to work with multi-processes scenarios
