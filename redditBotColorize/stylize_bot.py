@@ -7,6 +7,7 @@ import praw
 import time
 import re
 import database
+import requests
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--subreddit", help="which subreddit to use", default="rickandmorty")
@@ -33,10 +34,15 @@ def check_condition(c):
 def bot_action(c, verbose=True):
     if not database.did_reply_thread(c.link_id):
         img_url = c.link_url
-        stylized_image_url = ""
+        url = "http://www.somatic.io/api/v1/random_style"
+        files = {"--input": img_url}
+        data = {"api_key" : api_key} #import from secret_keys
+        response = requests.post(url, data=data, files=files)
+
+        stylized_image_url = "http://www.somatic.io/examples/" + response.content
 
         if len(stylized_image_url) == 0:
-            print 'From bot action :: There was an error while trying to colorize and upload the photo , %s' % img_url
+            print 'From bot action :: There was an error while trying to stylize and upload the photo , %s' % img_url
             return ''
 
         #Reply to the one who summned the bot
@@ -67,7 +73,7 @@ def handle_private_msg(msg,verbose=True):
 
         if len(stylized_image_url) == 0 or 'already_stylized' in stylized_image_url:
             msg.mark_as_read()
-            print 'From Private msg :: There was an error while trying to colorize and upload the photo , %s',url
+            print 'From Private msg :: There was an error while trying to stylize and upload the photo , %s',url
             return ''
         msg_to_send = 'Hi I\'m stylizebot.\n\n This is my attempt to stylize your image, here you go : %s \n\n This is still a **beta-bot**. '%(stylized_image_url)
         try:
