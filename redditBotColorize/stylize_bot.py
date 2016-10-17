@@ -39,16 +39,15 @@ def stylize_and_upload_from_url(image_url,verbose=True):
         print 'Problem downloading %s' % image_url
         return ''
 
-    url = "http://www.somatic.io/api/v1/random_style"
-    files = {"--input": ('image.jpg', open(img_path, 'rb'),'image/jpeg')}
-    data = {"api_key" : secret_keys.api_key} #import from secret_keys
-
-    response = requests.post(url, data=data)
-
     verbose_print(['link is : ', image_url, 'img_path is ',img_path],verbose)
 
     # Somatic api call
+    url = "http://www.somatic.io/api/v1/random_style"
+    files = {"--input": ('image.jpg', open(img_path, 'rb'),'image/jpeg')}
+    data = {"api_key" : secret_keys.api_key} #import from secret_keys
+    response = requests.post(url, data=data, files=files)
 
+    uploaded_stylized_image_url = "http://www.somatic.io/examples/" + response.content
 
     return uploaded_stylized_image_url
 
@@ -59,8 +58,6 @@ def bot_action(c, verbose=True):
         img_url = c.link_url
 
         stylized_image_url = stylize_and_upload_from_url(img_url)
-
-        #stylized_image_url = "http://www.somatic.io/examples/" + response.content
 
         if len(stylized_image_url) == 0:
             print 'From bot action :: There was an error while trying to stylize and upload the photo , %s' % img_url
