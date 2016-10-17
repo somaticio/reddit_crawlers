@@ -9,10 +9,10 @@ import re
 import database
 import requests
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--subreddit", help="which subreddit to use", default="rickandmorty")
-args = parser.parse_args()
-subreddit = args.subreddit
+#parser = argparse.ArgumentParser()
+#parser.add_argument("--subreddit", help="which subreddit to use", default="rickandmorty")
+#args = parser.parse_args()
+#subreddit = args.subreddit
 # Login to Reddit
 reddit_account = praw.Reddit(secret_keys.reddit_bot_user_agent)
 reddit_account.login(username=secret_keys.reddit_username,password=secret_keys.reddit_user_password)
@@ -84,36 +84,37 @@ def handle_private_msg(msg,verbose=True):
 
 def run_main_reddit_loop():
     global praw,database,upload_timer
-
+    list = ['rickandmorty', 'funny', 'pics', 'worldnews', 'food']
     #Main loop the listens to new comments on some subreddit
-    for c in praw.helpers.comment_stream(reddit_account, subreddit):
-        if check_condition(c):
-            if not database.did_reply_comment(c.id):
-                submission = reddit_account.get_submission(submission_id=c.permalink)
-                flat_comments = praw.helpers.flatten_tree(submission.comments)
-                already_commented = False
-                for comment in flat_comments:
-                    if str(comment.author) == secret_keys.reddit_username:
-                        database.add_comment(c.id)
-                        database.add_thread(c.link_id,c.link_url,'')
-                        already_commented = True
-                        break
-                if not already_commented:
-                    bot_action(c)
-        if (time.time() - upload_timer)  > upload_timeout :
-            upload_timer = time.time()
-            print "Trying to send a comment"
-            try:
-                reddit_comment,msg = upload_queue[0]
-                print reddit_comment.permalink,msg
-                reddit_comment.reply(msg)
-                upload_queue.pop()
-            except:
-                pass
+    for subreddit in list:
+        for c in praw.helpers.comment_stream(reddit_account, subreddit):
+            if check_condition(c):
+                if not database.did_reply_comment(c.id):
+                    submission = reddit_account.get_submission(submission_id=c.permalink)
+                    flat_comments = praw.helpers.flatten_tree(submission.comments)
+                    already_commented = False
+                    for comment in flat_comments:
+                        if str(comment.author) == secret_keys.reddit_username:
+                            database.add_comment(c.id)
+                            database.add_thread(c.link_id,c.link_url,'')
+                            already_commented = True
+                            break
+                    if not already_commented:
+                        bot_action(c)
+            if (time.time() - upload_timer)  > upload_timeout :
+                upload_timer = time.time()
+                print "Trying to send a comment"
+                try:
+                    reddit_comment,msg = upload_queue[0]
+                    print reddit_comment.permalink,msg
+                    reddit_comment.reply(msg)
+                    upload_queue.pop()
+                except:
+                    pass
 
-        for msg in reddit_account.get_unread(limit=None):
-            if msg.new and len(msg.context) == 0:
-                handle_private_msg(msg)
+            for msg in reddit_account.get_unread(limit=None):
+                if msg.new and len(msg.context) == 0:
+                    handle_private_msg(msg)
 
 while True:
     try:
