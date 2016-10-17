@@ -31,14 +31,36 @@ def check_condition(c):
     if len(tokens)  == 1 and ("stylizebot" in tokens):
         return True
 
+def stylize_and_upload_from_url(image_url,verbose=True):
+    img_path = image_downloader.download_image(image_url)
+
+    #didn't mange to download photo
+    if len(img_path) == 0:
+        print 'Problem downloading %s' % image_url
+        return ''
+
+    url = "http://www.somatic.io/api/v1/random_style"
+    files = {"--input": ('image.jpg', open(img_path, 'rb'),'image/jpeg')}
+    data = {"api_key" : secret_keys.api_key} #import from secret_keys
+
+    response = requests.post(url, data=data)
+
+    verbose_print(['link is : ', image_url, 'img_path is ',img_path],verbose)
+
+    # Somatic api call
+
+
+    return uploaded_stylized_image_url
+
+
 def bot_action(c, verbose=True):
+    print(c.link_id)
     if not database.did_reply_thread(c.link_id):
         img_url = c.link_url
-        url = "http://www.somatic.io/api/v1/random_style"
-        data = {"api_key" : secret_keys.api_key, "--input": img_url} #import from secret_keys
-        response = requests.post(url, data=data)
 
-        stylized_image_url = "http://www.somatic.io/examples/" + response.content
+        stylized_image_url = stylize_and_upload_from_url(img_url)
+
+        #stylized_image_url = "http://www.somatic.io/examples/" + response.content
 
         if len(stylized_image_url) == 0:
             print 'From bot action :: There was an error while trying to stylize and upload the photo , %s' % img_url
@@ -68,7 +90,7 @@ def handle_private_msg(msg,verbose=True):
     urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', msg.body)
     for url in urls:
         print 'URL from msg: ',url
-        stylized_image_url = colorize_and_upload_from_url(url)
+        stylized_image_url = stylize_and_upload_from_url(url)
 
         if len(stylized_image_url) == 0 or 'already_stylized' in stylized_image_url:
             msg.mark_as_read()
