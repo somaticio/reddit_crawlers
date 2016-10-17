@@ -36,7 +36,7 @@ def bot_action(c, verbose=True):
         img_url = c.link_url
         url = "http://www.somatic.io/api/v1/random_style"
         files = {"--input": img_url}
-        data = {"api_key" : api_key} #import from secret_keys
+        data = {"api_key" : secret_keys.api_key} #import from secret_keys
         response = requests.post(url, data=data, files=files)
 
         stylized_image_url = "http://www.somatic.io/examples/" + response.content
