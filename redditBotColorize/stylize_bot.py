@@ -48,7 +48,7 @@ def stylize_and_upload_from_url(image_url,verbose=True):
     response = requests.post(url, data=data, files=files)
 
     uploaded_stylized_image_url = "http://www.somatic.io/examples/" + response.content
-
+    print(uploaded_stylized_image_url)
     return uploaded_stylized_image_url
 
 
