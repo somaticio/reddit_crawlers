@@ -10,7 +10,7 @@ import database
 import requests
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--subreddit", help="which subreddit to use", default="rickandmorty")
+parser.add_argument("--subreddit", help="which subreddit to use", default="rickandmorty+food")
 args = parser.parse_args()
 subreddit = args.subreddit
 # Login to Reddit
@@ -108,10 +108,6 @@ def run_main_reddit_loop():
                 upload_queue.pop()
             except:
                 pass
-
-        for msg in reddit_account.get_unread(limit=None):
-            if msg.new and len(msg.context) == 0:
-                handle_private_msg(msg)
 
 while True:
     try:
