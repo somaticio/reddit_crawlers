@@ -25,6 +25,8 @@ def verbose_print(msg,verbose = False):
     if verbose:
         print msg
 
+
+
 def check_condition(c):
     text = c.body
     tokens = text.lower().split()
@@ -68,9 +70,6 @@ def bot_action(c, verbose=True):
             msg = 'Hi I\'m stylizebot. I was trained to stylize photos.\n\n Your photo seems to be already stylized, Please try uploading another photo. \n\n This is still a **beta-bot**.'
         else:
             msg = 'Hi I\'m stylizebot. I was trained to stylize photos.\n\n This is my attempt to stylize your image, here you go : %s \n\n This is still a **beta-bot**. '%(stylized_image_url)
-    else:
-        stylized_image_url = image_downloader.get_secret_image_url()
-        msg = 'Hi I\'m stylizebot. \n\n It seems this photo has been requested to be stylized already. '%(stylized_image_url)
     try:
         res = c.reply(msg)
         database.add_thread(c.link_id,c.link_url,stylized_image_url)
@@ -79,27 +78,6 @@ def bot_action(c, verbose=True):
         upload_queue.append((c,msg))
         traceback.print_exc()
 
-def handle_private_msg(msg,verbose=True):
-
-    if database.did_reply_comment(msg.id):
-        return
-
-    urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', msg.body)
-    for url in urls:
-        print 'URL from msg: ',url
-        stylized_image_url = stylize_and_upload_from_url(url)
-
-        if len(stylized_image_url) == 0 or 'already_stylized' in stylized_image_url:
-            msg.mark_as_read()
-            print 'From Private msg :: There was an error while trying to stylize and upload the photo , %s',url
-            return ''
-        msg_to_send = 'Hi I\'m stylizebot.\n\n This is my attempt to stylize your image, here you go : %s \n\n This is still a **beta-bot**. '%(stylized_image_url)
-        try:
-            res = msg.reply(msg_to_send)
-            msg.mark_as_read()
-            database.add_comment(msg.id)
-        except:
-            traceback.print_exc()
 
 def run_main_reddit_loop():
     global praw,database,upload_timer
