@@ -70,13 +70,13 @@ def bot_action(c, verbose=True):
             msg = 'Hi I\'m stylizebot. I was trained to stylize photos.\n\n Your photo seems to be already stylized, Please try uploading another photo. \n\n This is still a **beta-bot**.'
         else:
             msg = 'Hi I\'m stylizebot. I was trained to stylize photos.\n\n This is my attempt to stylize your image, here you go : %s \n\n This is still a **beta-bot**. '%(stylized_image_url)
-    try:
-        res = c.reply(msg)
-        database.add_thread(c.link_id,c.link_url,stylized_image_url)
-        database.add_comment(c.id)
-    except:
-        upload_queue.append((c,msg))
-        traceback.print_exc()
+        try:
+            res = c.reply(msg)
+            database.add_thread(c.link_id,c.link_url,stylized_image_url)
+            database.add_comment(c.id)
+        except:
+            upload_queue.append((c,msg))
+            traceback.print_exc()
 
 
 def run_main_reddit_loop():
