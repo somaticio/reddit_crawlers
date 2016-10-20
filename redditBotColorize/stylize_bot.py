@@ -9,10 +9,10 @@ import re
 import database
 import requests
 
-#parser = argparse.ArgumentParser()
-#parser.add_argument("--subreddit", help="which subreddit to use", default="rickandmorty")
-#args = parser.parse_args()
-#subreddit = args.subreddit
+parser = argparse.ArgumentParser()
+parser.add_argument("--subreddit", help="which subreddit to use", default="rickandmorty")
+args = parser.parse_args()
+subreddit = args.subreddit
 # Login to Reddit
 reddit_account = praw.Reddit(secret_keys.reddit_bot_user_agent)
 reddit_account.login(username=secret_keys.reddit_username,password=secret_keys.reddit_user_password)
