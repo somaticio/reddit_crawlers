@@ -12,12 +12,12 @@ import secret_keys
 
 client_id = secret_keys.imgur_client_id
 imgur_client = None
-secret_album = None
+#secret_album = None
 
 def init_imgur_client():
-    global imgur_client,secret_album
+    global imgur_client#,secret_album
     imgur_client = pyimgur.Imgur(client_id)
-    secret_album = imgur_client.get_album(secret_keys.imgur_secret_album_id)
+    #secret_album = imgur_client.get_album(secret_keys.imgur_secret_album_id)
 
 
 def is_supported_image_url(url):
@@ -28,15 +28,15 @@ def is_supported_image_url(url):
 
 def is_imgur_image_url(url):
     return (
-            'imgur' in url and 
-            '/a/' not in url and #not an album 
+            'imgur' in url and
+            '/a/' not in url and #not an album
             '.' not in url.split('/')[-1] #no extension
     )
 
 def is_imgur_album_url(url):
     return (
-            'imgur' in url and 
-            '/a/' in url and #not an album 
+            'imgur' in url and
+            '/a/' in url and #not an album
             '.' not in url.split('/')[-1] #no extension
     )
 
@@ -64,7 +64,7 @@ def is_imgur_album_with_one_picture(url):
             return True
         return False
     return False
-        
+
 
 def is_reddit_image(url):
     return 'https://i.reddituploads.com' in url
@@ -75,7 +75,7 @@ def download_image_from_imgur(url):
         init_imgur_client()
 
     #image-id could be /image_id?something
-    image_id = url.split('/')[-1].split('?')[0] 
+    image_id = url.split('/')[-1].split('?')[0]
     try:
         img = imgur_client.get_image(image_id)
         image_url = img.link
@@ -84,7 +84,7 @@ def download_image_from_imgur(url):
         if is_supported_image_url(image_url):
             download_image(image_url,image_name)
             return image_name
-    except: 
+    except:
         print 'Error getting %s' % image_id
 
     return ''
@@ -126,7 +126,7 @@ def download_simple_image(url,filename="temp.jpg"):
             with open(filename,'wb') as image_fid:
                 image_fid.write(r.content)
                 image_fid.close()
-        else:    
+        else:
             urllib.urlretrieve(url,filename)
         return filename
     except:
@@ -153,10 +153,10 @@ def download_image(url,filename="temp.jpg"):
 
     return image_name
 
-def get_secret_image_url():
-    global secret_album,imgur_client
+#def get_secret_image_url():
+    #global imgur_client, secret_album
 
-    if imgur_client is None:
-        init_imgur_client()
+    #if imgur_client is None:
+        #init_imgur_client()
 
-    return secret_album.images[int(random.uniform(0,len(secret_album.images)))].link
+    #return secret_album.images[int(random.uniform(0,len(secret_album.images)))].link
