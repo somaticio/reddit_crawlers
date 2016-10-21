@@ -48,8 +48,10 @@ def stylize_and_upload_from_url(image_url,verbose=True):
     files = {"--input": ('image.jpg', open(img_path, 'rb'),'image/jpeg')}
     data = {"api_key" : secret_keys.api_key} #import from secret_keys
     response = requests.post(url, data=data, files=files)
-
-    uploaded_stylized_image_url = "http://www.somatic.io/examples/" + response.content
+    if len(response.content) == 8:
+        uploaded_stylized_image_url = "http://www.somatic.io/examples/" + response.content
+    else:
+        uploaded_stylized_image_url = ""
     print(uploaded_stylized_image_url)
     return uploaded_stylized_image_url
 
