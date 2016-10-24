@@ -10,7 +10,9 @@ import database
 import requests
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--subreddit", help="which subreddit to use", default="rickandmorty+food")
+parser.add_argument("--subreddit", help="which subreddit to use",
+                    default="rickandmorty+funny+nonononono+ExpectationVsReality+aww+todayilearned+gaming
+                    +mildlyinteresting+Art+photoshopbattles+space+DIY+OldSchoolCool")
 args = parser.parse_args()
 subreddit = args.subreddit
 # Login to Reddit
