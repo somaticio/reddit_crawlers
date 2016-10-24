@@ -11,8 +11,11 @@ import requests
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--subreddit", help="which subreddit to use",
-                    default="rickandmorty+funny+nonononono+ExpectationVsReality+aww+todayilearned+gaming
-                    +mildlyinteresting+Art+photoshopbattles+space+DIY+OldSchoolCool")
+                    default="rickandmorty+funny+nonononono+ExpectationVsReality+aww+\
+                    todayilearned+gaming+mildlyinteresting+Art+photoshopbattles+space+\
+                    DIY+OldSchoolCool+creepy+Futurology+EarthPorn+UpliftingNews+\
+                    sports+The_Donald+AdviceAnimals+atheism+europe+woahdude+interestingasfuck+\
+                    BlackPeopleTwitter+pokemongo+pcmasterrace+ImGoingToHellForThis+pokemon")
 args = parser.parse_args()
 subreddit = args.subreddit
 # Login to Reddit
