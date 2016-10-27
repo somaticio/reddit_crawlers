@@ -35,7 +35,7 @@ def verbose_print(msg,verbose = False):
 def check_condition(c):
     text = c.body
     tokens = text.lower().split()
-    if len(tokens)  == 1 and ("stylizebot" in tokens):
+    if ("stylizebot" in tokens):
         return True
 
 def stylize_and_upload_from_url(image_url,verbose=True):
