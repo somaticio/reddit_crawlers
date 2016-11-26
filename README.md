@@ -1,18 +1,4 @@
-# reddit_crawlers
-will try to make interesting reddit crawlers that give some insight
-
-Uses python praw library
-
-
-For the colorize bot:
-we use the following python extra packages:
-* opencv
-* skimage
-* scipy
-* numpy
-* ImgurClient - https://github.com/Damgaard/PyImgur /  https://github.com/Imgur/imgurpython
-* caffe
-
-colorization caffe model link:
-https://www.dropbox.com/s/8iq5wm4ton5gwe1/colorization_release_v0.caffemodel
-
+# Usage
+- 1. Edit base path in /reddit/_crawlers/redditBotColorize/stylizebot.conf 
+- 2. Put the conf under /etc/init/
+- 3. `sudo start stylizebot` to start the bot
